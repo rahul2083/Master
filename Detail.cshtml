@@ -1,0 +1,126 @@
+﻿@model master.core.Entities.TaskItem
+@using System.Security.Claims;
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="fw-bold">Task Details</h3>
+        <a href="/Task/Index" class="btn btn-secondary">Back</a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            <!-- TITLE + DESCRIPTION -->
+            <h4 class="fw-semibold">@Model.Title</h4>
+            <p class="text-muted">@Model.Description</p>
+
+            <hr />
+
+            <!-- MAIN INFO -->
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <strong>Project:</strong>
+                    <span class="badge bg-dark">@Model.ProjectName</span>
+                </div>
+                <div class="col-md-4">
+                    <strong>Priority:</strong>
+                    <span class="badge bg-primary">@Model.Priority</span>
+                </div>
+                <div class="col-md-4">
+                    <strong>Status:</strong>
+                    <span class="badge bg-warning text-dark">@Model.Status</span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <strong>Start Date:</strong> @Model.StartDate?.ToString("yyyy-MM-dd")
+                </div>
+                <div class="col-md-4">
+                    <strong>Due Date:</strong> @Model.DueDate?.ToString("yyyy-MM-dd")
+                </div>
+                <div class="col-md-4">
+                    <strong>Assigned To:</strong>
+                    <span class="badge bg-success">@Model.Assignee?.FullName ?? "Not Assigned"</span>
+                </div>
+            </div>
+
+            <hr />
+
+            <!-- PROGRESS BAR -->
+            @{
+                int total = Model.Subtasks.Count;
+                int done = Model.Subtasks.Count(s => s.IsDone);
+                int percent = total > 0 ? (done * 100 / total) : 0;
+            }
+
+            <h5 class="fw-bold">Progress</h5>
+            <div class="progress mb-4" style="height: 25px;">
+                <div class="progress-bar bg-success fw-bold" role="progressbar"
+                     style="width: @percent%; font-size: 14px;">
+                    @percent%
+                </div>
+            </div>
+
+            <!-- ADD SUBTASK (shown only to user / assignee) -->
+            @if (!User.IsInRole("Manager") &&
+                        Model.AssigneeId == int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)))
+            {
+                <a href="/Subtask/Create?taskId=@Model.Id" class="btn btn-primary mb-3">
+                    + Add Subtask
+                </a>
+            }
+
+            <!-- SUBTASK TABLE -->
+            <h5 class="fw-bold">Subtasks</h5>
+
+            @if (Model.Subtasks != null && Model.Subtasks.Any())
+            {
+                <table class="table table-hover table-bordered mt-2">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Title</th>
+                            <th>Status</th>
+                            <th>Done</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var s in Model.Subtasks)
+                        {
+                            <tr>
+                                <td>@s.Title</td>
+
+                                <td>
+                                    <span class="badge @(s.IsDone ? "bg-success" : "bg-warning text-dark")">
+                                        @s.Status
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <input type="checkbox" disabled @(s.IsDone ? "checked" : "") />
+                                </td>
+
+                                <td>
+                                    @if (!s.IsDone &&
+                                                                (User.IsInRole("Manager") ||
+                                                                Model.AssigneeId == int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier))))
+                                    {
+                                        <form method="post" action="/Subtask/Close/@s.Id" style="display:inline;">
+                                            <button class="btn btn-success btn-sm">Close</button>
+                                        </form>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="alert alert-info">No subtasks added yet.</div>
+            }
+        </div>
+    </div>
+</div>

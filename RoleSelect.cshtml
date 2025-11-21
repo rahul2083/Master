@@ -1,0 +1,93 @@
+﻿@using master.core.Enums
+@{
+    ViewData["Title"] = "Choose Role";
+}
+<div class="container py-5">
+    <div class="text-center mb-4">
+        <h2 class="fw-semibold mb-1">Continue as</h2>
+        <p class="text-muted mb-0">Select your workspace to proceed</p>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+        <!-- Manager -->
+        <div class="col-12 col-md-6 col-lg-5">
+            <div class="card shadow-sm border-0 h-100 border-start border-4 border-primary">
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex align-items-start justify-content-between">
+                        <div>
+                            <h4 class="card-title mb-1">Manager</h4>
+                            <p class="card-text text-muted mb-3">
+                                Create and assign tasks, track progress, and manage your team.
+                            </p>
+                        </div>
+                        <span class="badge bg-primary-subtle text-primary border border-primary">Team Lead</span>
+                    </div>
+
+                    <ul class="list-unstyled small text-muted mb-4">
+                        <li class="mb-1">• Assign tasks to users</li>
+                        <li class="mb-1">• Edit status and priority</li>
+                        <li class="mb-1">• View all team tasks</li>
+                    </ul>
+
+                    <div class="mt-auto d-flex gap-2">
+                        <a class="btn btn-primary"
+                           href="@Url.Action("Register", "Account", new { role = UserRole.Manager })">
+                            Register
+                        </a>
+                        <a class="btn btn-outline-primary"
+                           href="@Url.Action("Login", "Account", new { role = UserRole.Manager })">
+                            Login
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User -->
+        <div class="col-12 col-md-6 col-lg-5">
+            <div class="card shadow-sm border-0 h-100 border-start border-4 border-success">
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex align-items-start justify-content-between">
+                        <div>
+                            <h4 class="card-title mb-1">User</h4>
+                            <p class="card-text text-muted mb-3">
+                                View your assigned tasks, update progress, and mark items done.
+                            </p>
+                        </div>
+                        <span class="badge bg-success-subtle text-success border border-success">Contributor</span>
+                    </div>
+
+                    <ul class="list-unstyled small text-muted mb-4">
+                        <li class="mb-1">• See only your tasks</li>
+                        <li class="mb-1">• Update status to Done</li>
+                        <li class="mb-1">• Focused personal view</li>
+                    </ul>
+
+                    <div class="mt-auto d-flex gap-2">
+                        <a class="btn btn-success"
+                           href="@Url.Action("Register", "Account", new { role = UserRole.User })">
+                            Register
+                        </a>
+                        <a class="btn btn-outline-success"
+                           href="@Url.Action("Login", "Account", new { role = UserRole.User })">
+                            Login
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center text-muted small mt-4">
+        You can switch roles anytime from the login screen.
+    </div>
+</div>
+
+<style>
+    /* Optional subtle hover for cards */
+    .card.shadow-sm:hover {
+        box-shadow: 0 .5rem 1rem rgba(0,0,0,.08) !important;
+        transform: translateY(-2px);
+        transition: all .15s ease;
+    }
+</style>

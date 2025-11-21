@@ -1,0 +1,73 @@
+﻿@using master.core.Enums
+@model master.core.Entities.TaskItem
+@using TaskStatus = master.core.Enums.TaskStatus;
+
+<div class="p-2">
+
+    <h4 class="fw-bold mb-3"><i class="bi bi-plus-circle"></i> Create Task</h4>
+
+    <form asp-action="Create" method="post" class="ajax-form">
+
+        <!-- PROJECT -->
+        <div class="mb-3">
+            <label class="form-label">Project</label>
+            <input asp-for="ProjectName" class="form-control" placeholder="Enter project name" />
+        </div>
+
+        <!-- TITLE -->
+        <div class="mb-3">
+            <label class="form-label">Title</label>
+            <input asp-for="Title" class="form-control" placeholder="Task title" />
+        </div>
+
+        <!-- DESCRIPTION -->
+        <div class="mb-3">
+            <label class="form-label">Description</label>
+            <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+        </div>
+
+        <!-- PRIORITY / STATUS -->
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label>Priority</label>
+                <select asp-for="Priority" class="form-select"
+                        asp-items="Html.GetEnumSelectList<TaskPriority>()"></select>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label>Status</label>
+                <select asp-for="Status" class="form-select"
+                        asp-items="Html.GetEnumSelectList<TaskStatus>()"></select>
+            </div>
+        </div>
+
+        <!-- DATES -->
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label>Start Date</label>
+                <input asp-for="StartDate" type="date" class="form-control" />
+            </div>
+            <div class="col-md-6 mb-3">
+                <label>Due Date</label>
+                <input asp-for="DueDate" type="date" class="form-control" />
+            </div>
+        </div>
+
+        <!-- ASSIGNEE -->
+        <div class="mb-3">
+            <label>Assignee</label>
+            <select asp-for="AssigneeId" class="form-select"
+                    asp-items="(SelectList)ViewBag.Assignees">
+                <option value="">-- Select --</option>
+            </select>
+        </div>
+
+        <!-- BUTTONS -->
+        <div class="mt-3 d-flex gap-2 justify-content-between">
+            <button class="btn btn-primary w-50">Save</button>
+            <button type="button" onclick="closeDrawer()" class="btn btn-light w-50">Cancel</button>
+        </div>
+
+    </form>
+
+</div>

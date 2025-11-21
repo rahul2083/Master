@@ -1,0 +1,102 @@
+﻿@model master.core.Entities.TaskItem
+@using master.core.Enums
+
+<style>
+    body {
+        background: #f4f4f4 !important; /* 🔥 Removed image — clean grey background */
+    }
+
+    .glass-box {
+        background: rgba(255, 255, 255, 0.65);
+        backdrop-filter: blur(12px);
+        border-radius: 14px;
+        border: 1px solid rgba(0,0,0,0.15);
+        padding: 25px;
+    }
+
+    .glass-input {
+        background: rgba(255,255,255,0.5);
+        border: 1px solid rgba(0,0,0,0.25);
+        color: #000;
+    }
+
+        .glass-input:focus {
+            background: rgba(255,255,255,0.7);
+            border-color: #0d6efd;
+            box-shadow: 0 0 4px rgba(13,110,253,0.45);
+        }
+</style>
+
+<div class="container mt-4" style="max-width:950px;">
+    <div class="glass-box shadow-lg">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="fw-bold">Edit Task</h3>
+            <a href="/Task/Index" class="btn btn-outline-dark">Back</a>
+        </div>
+
+        <form method="post">
+
+            <!-- PROJECT -->
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Project</label>
+                <input asp-for="ProjectName" class="form-control glass-input" placeholder="Enter project name" />
+            </div>
+
+            <!-- TITLE -->
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Title</label>
+                <input asp-for="Title" class="form-control glass-input" placeholder="Task title" />
+            </div>
+
+            <!-- DESCRIPTION -->
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Description</label>
+                <textarea asp-for="Description" rows="4" class="form-control glass-input"
+                          placeholder="Enter description"></textarea>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Priority</label>
+                    <select asp-for="Priority" class="form-select glass-input"
+                            asp-items="Html.GetEnumSelectList<TaskPriority>()"></select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Start Date</label>
+                    <input asp-for="StartDate" type="date" class="form-control glass-input" />
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Due Date</label>
+                    <input asp-for="DueDate" type="date" class="form-control glass-input" />
+                </div>
+            </div>
+
+            <!-- ASSIGNEE -->
+            <div class="mb-3 mt-3">
+                <label class="form-label fw-semibold">Assignee</label>
+                <select asp-for="AssigneeId" class="form-select glass-input" asp-items="(SelectList)ViewBag.Assignees">
+                    <option value="">-- Unassigned --</option>
+                </select>
+            </div>
+
+            <!-- BUTTONS -->
+            <div class="d-flex gap-2 mt-4">
+                <button class="btn btn-primary px-4">Update</button>
+                <a href="/Task/Index" class="btn btn-outline-dark">Cancel</a>
+            </div>
+
+        </form>
+
+        <!-- ERRORS -->
+        <div class="mt-3 text-danger fw-bold">
+            @foreach (var err in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <div>@err.ErrorMessage</div>
+            }
+        </div>
+
+    </div>
+</div>
